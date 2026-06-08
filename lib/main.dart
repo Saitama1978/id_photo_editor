@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
+import 'package:gal/gal.dart'; // Import para sa pag-save sa Gallery
 
 void main() {
   runApp(const IDPhotoEditorApp());
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   File? _originalImage;
   File? _processedImage;
   bool _isLoading = false;
+  bool _isSaving = false;
   String _selectedSize = '1x1';
   bool _removeBackground = false;
 
@@ -165,6 +167,38 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // BAGONG FEATURE: Pag-save sa Gallery gamit ang 'gal' package
+  Future<void> _saveToGallery() async {
+    if (_processedImage == null) return;
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      // Humingi ng permiso at i-save ang image file diretso sa phone gallery
+      await Gal.putImage(_processedImage!.path);
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Saved! Tingnan ang iyong Gallery o Photos app. 🎉'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error sa pag-save: $e'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -274,7 +308,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    const Divider(height: 30),
+                    const Divider(height: 20),
+                    
+                    // BUTTON PARA MAG-SAVE SA GALLERY (Lalabas lang kapag may result na)
+                    if (_processedImage != null) ...[
+                      _isSaving
+                          ? const Center(child: CircularProgressIndicator())
+                          : ElevatedButton.icon(
+                              onPressed: _saveToGallery,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green[700],
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              icon: const Icon(Icons.save_alt),
+                              label: const Text('I-save ang ID Photo sa Gallery', style: TextStyle(fontWeight: FontWeight.bold)),
+                            ),
+                      const Divider(height: 20),
+                    ],
+
                     SwitchListTile(
                       title: const Text('Auto-Remove Background (White BG)'),
                       subtitle: const Text('Kailangan ng Remove.bg API key sa code'),

@@ -7,3 +7,4 @@ android-sdk/
 android/.gradle/
 android/local.properties
 .env
+*.apk
