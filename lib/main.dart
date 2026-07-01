@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, // Inayos mula sa dating CenterAxisAlignment
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Preview Section
             Row(
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: _originalImage != null
-                            ? Image.file(_originalImage!, fit: BoxFit.cover) // Tinanggal ang sobrang tuldok
+                            ? Image.file(_originalImage!, fit: BoxFit.cover)
                             : const Center(child: Icon(Icons.image, size: 50)),
                       ),
                     ],
@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: _isLoading
                             ? const Center(child: CircularProgressIndicator())
                             : _processedImage != null
-                                ? Image.file(_processedImage!, fit: BoxFit.contain) // Tinanggal ang sobrang tuldok
+                                ? Image.file(_processedImage!, fit: BoxFit.contain)
                                 : const Center(child: Icon(Icons.portrait, size: 50)),
                       ),
                     ],
@@ -306,6 +306,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     : const Text('Save to Gallery', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
+            const SizedBox(height: 32),
+
+            // Developer Footer Credential
+            Text(
+              'Developed by: Renante Fullo',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
