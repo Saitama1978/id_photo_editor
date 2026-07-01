@@ -15,34 +15,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Setup Java Environment
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      # 2. Setup Flutter Environment
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
-      # 3. Awtomatikong hahanapin kung nasaan ang Flutter project at doon mag-pu-pub get at build
-      - name: Detect Project and Build APK
-        run: |
-          # Hahanapin kung saang folder nakalagay ang pubspec.yaml
-          PROJECT_DIR=$(dirname $(find . -name "pubspec.yaml" -print -quit))
-          echo "Natagpuan ang Flutter project sa folder: $PROJECT_DIR"
-          
-          # Papasok sa folder na iyon para i-run ang mga commands
-          cd "$PROJECT_DIR"
-          
-          flutter pub get
-          flutter build apk --release --split-per-abi
+      - name: Install dependencies
+        run: flutter pub get
 
-      # 4. I-upload ang nagawang APK (Hahanapin din kung nasaan man ito na-save)
+      - name: Build APK
+        run: flutter build apk --release --split-per-abi
+
+      # Malawakang paghahanap para masigurong makuha ang mga nagawang APK artifact
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
