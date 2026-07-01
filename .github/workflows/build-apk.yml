@@ -1,0 +1,51 @@
+name: Build Flutter APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Pinapayagan ka nitong i-trigger ang build nang manual sa GitHub website
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. I-checkout ang iyong source code mula sa repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. I-setup ang Java Development Kit (JDK) na kailangan ng Android
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' # Pwede rin 'temurin'
+          java-version: '17'   # Inirerekomenda para sa mga modernong bersyon ng Flutter/Android
+
+      # 3. I-setup ang Flutter Environment
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true # Awtomatikong sine-save ang Flutter SDK cache para sa mas mabilis na build sa susunod
+
+      # 4. I-download ang mga pub packages ng iyong app
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 5. I-build ang Release APK (Gumagamit ng split-per-abi para maging magaan ang file size)
+      - name: Build APK
+        run: flutter build apk --release --split-per-abi
+
+      # 6. I-upload ang na-build na APK sa GitHub Actions artifact para ma-download mo
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-apk-release
+          path: build/app/outputs/flutter-apk/*.apk
+          retention-days: 7 # Mananatiling mada-download ang file sa loob ng 7 araw
