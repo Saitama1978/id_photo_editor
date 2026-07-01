@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CenterAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center, // Inayos mula sa dating CenterAxisAlignment
           children: [
             // Preview Section
             Row(
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: _originalImage != null
-                            ? Image.file(_originalImage!, fit: .BoxFit.cover)
+                            ? Image.file(_originalImage!, fit: BoxFit.cover) // Tinanggal ang sobrang tuldok
                             : const Center(child: Icon(Icons.image, size: 50)),
                       ),
                     ],
@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: _isLoading
                             ? const Center(child: CircularProgressIndicator())
                             : _processedImage != null
-                                ? Image.file(_processedImage!, fit: .BoxFit.contain)
+                                ? Image.file(_processedImage!, fit: BoxFit.contain) // Tinanggal ang sobrang tuldok
                                 : const Center(child: Icon(Icons.portrait, size: 50)),
                       ),
                     ],
