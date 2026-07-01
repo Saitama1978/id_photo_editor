@@ -29,17 +29,30 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # 3. Piliting i-repair o likhain ang 'android' folder kung kulang ang files sa repository
+      # 3. I-repair ang Android project structure
       - name: Repair and Generate Android Files
         run: |
           flutter create --platforms=android .
           flutter pub get
 
-      # 4. Pag-build ng APK (Sisiguraduhin nitong may build.gradle na dahil sa hakbang sa itaas)
+      # 4. Awtomatikong i-bake ang logo mula sa ROOT folder bilang launcher icon
+      - name: Inject Launcher Icon
+        run: |
+          flutter pub add dev:flutter_launcher_icons
+          
+          echo "flutter_launcher_icons:" > flutter_launcher_icons.yaml
+          echo "  android: true" >> flutter_launcher_icons.yaml
+          echo "  ios: true" >> flutter_launcher_icons.yaml
+          echo "  image_path: \"app_logo.png\"" >> flutter_launcher_icons.yaml
+          
+          flutter pub get
+          flutter pub run flutter_launcher_icons
+
+      # 5. Pag-build ng APK (Kumpleto na kasama ang Icon at Developer settings)
       - name: Build APK
         run: flutter build apk --release --split-per-abi
 
-      # 5. Pag-upload ng natapos na APK
+      # 6. Pag-upload ng natapos na APK
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
