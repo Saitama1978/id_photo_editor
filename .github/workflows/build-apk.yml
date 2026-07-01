@@ -33,7 +33,6 @@ jobs:
       - name: Build APK
         run: flutter build apk --release --split-per-abi
 
-      # Malawakang paghahanap para masigurong makuha ang mga nagawang APK artifact
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
