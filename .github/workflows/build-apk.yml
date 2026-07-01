@@ -35,20 +35,20 @@ jobs:
           flutter create --platforms=android .
           flutter pub get
 
-      # 4. Awtomatikong i-bake ang logo mula sa ROOT folder bilang launcher icon
+      # 4. Awtomatikong i-bake ang logo PARA SA ANDROID LANG
       - name: Inject Launcher Icon
         run: |
           flutter pub add dev:flutter_launcher_icons
           
           echo "flutter_launcher_icons:" > flutter_launcher_icons.yaml
           echo "  android: true" >> flutter_launcher_icons.yaml
-          echo "  ios: true" >> flutter_launcher_icons.yaml
+          echo "  ios: false" >> flutter_launcher_icons.yaml
           echo "  image_path: \"app_logo.png\"" >> flutter_launcher_icons.yaml
           
           flutter pub get
           flutter pub run flutter_launcher_icons
 
-      # 5. Pag-build ng APK (Kumpleto na kasama ang Icon at Developer settings)
+      # 5. Pag-build ng APK (Kasama ang Android Icon at Developer name sa UI)
       - name: Build APK
         run: flutter build apk --release --split-per-abi
 
