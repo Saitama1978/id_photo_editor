@@ -15,26 +15,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Dito natin sinasabi sa Java at Flutter na nasa loob ng subfolder ang iyong app
+      # Setup Java env
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
+      # Setup Flutter env
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
-      # Idagdag muna natin ang launcher icons package para magka-icon ang app gamit ang logo mo
+      # Dito i-se-setup ang icon mo mula sa root directory
       - name: Install and Setup Icons
-        working-directory: id_photo_editor # Pinipilit nitong pumasok sa tamang folder
         run: |
           flutter pub add dev:flutter_launcher_icons
           
-          # Gumawa ng pansamantalang configuration para sa icon
+          # Paggawa ng launcher icons config file
           echo "flutter_launcher_icons:" > flutter_launcher_icons.yaml
           echo "  android: true" >> flutter_launcher_icons.yaml
           echo "  ios: true" >> flutter_launcher_icons.yaml
@@ -43,14 +43,14 @@ jobs:
           flutter pub get
           flutter pub run flutter_launcher_icons
 
-      # Dito na magbi-build ang APK nang walang error sa path
+      # Pag-build ng APK mula sa root directory
       - name: Build APK
-        working-directory: id_photo_editor
         run: flutter build apk --release --split-per-abi
 
+      # Pag-upload ng natapos na APK
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk-release
-          path: id_photo_editor/build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
           retention-days: 7
