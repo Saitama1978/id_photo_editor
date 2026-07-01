@@ -29,21 +29,11 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # Dito i-se-setup ang icon mo mula sa root directory
-      - name: Install and Setup Icons
-        run: |
-          flutter pub add dev:flutter_launcher_icons
-          
-          # Paggawa ng launcher icons config file
-          echo "flutter_launcher_icons:" > flutter_launcher_icons.yaml
-          echo "  android: true" >> flutter_launcher_icons.yaml
-          echo "  ios: true" >> flutter_launcher_icons.yaml
-          echo "  image_path: \"assets/icon/app_logo.png\"" >> flutter_launcher_icons.yaml
-          
-          flutter pub get
-          flutter pub run flutter_launcher_icons
+      # I-download ang dependencies nang malinis
+      - name: Install dependencies
+        run: flutter pub get
 
-      # Pag-build ng APK mula sa root directory
+      # Pag-build ng APK (Tinanggal muna ang automatic icon setup para umiwas sa error)
       - name: Build APK
         run: flutter build apk --release --split-per-abi
 
