@@ -15,24 +15,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 1. Setup Java Environment
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
+      # 2. Setup Flutter Environment
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
-      - name: Install dependencies
-        run: flutter pub get
+      # 3. Piliting i-repair o likhain ang 'android' folder kung kulang ang files sa repository
+      - name: Repair and Generate Android Files
+        run: |
+          flutter create --platforms=android .
+          flutter pub get
 
+      # 4. Pag-build ng APK (Sisiguraduhin nitong may build.gradle na dahil sa hakbang sa itaas)
       - name: Build APK
         run: flutter build apk --release --split-per-abi
 
+      # 5. Pag-upload ng natapos na APK
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
