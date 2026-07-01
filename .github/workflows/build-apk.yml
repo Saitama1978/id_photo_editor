@@ -15,32 +15,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Java env
+      # 1. Setup Java Environment
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      # Setup Flutter env
+      # 2. Setup Flutter Environment
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
 
-      # I-download ang dependencies nang malinis
+      # 3. I-download ang dependencies sa tamang folder
       - name: Install dependencies
+        working-directory: id_photo_editor
         run: flutter pub get
 
-      # Pag-build ng APK (Tinanggal muna ang automatic icon setup para umiwas sa error)
+      # 4. I-build ang APK gamit ang tamang folder path
       - name: Build APK
+        working-directory: id_photo_editor
         run: flutter build apk --release --split-per-abi
 
-      # Pag-upload ng natapos na APK
+      # 5. I-upload ang nagawang APK mula sa tamang lokasyon
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk-release
-          path: build/app/outputs/flutter-apk/*.apk
+          path: id_photo_editor/build/app/outputs/flutter-apk/*.apk
           retention-days: 7
